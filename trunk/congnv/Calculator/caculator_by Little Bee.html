@@ -1,0 +1,247 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Caculator_ By Little Bee</title>
+<style type="text/css">
+<!--
+body {
+	margin:30;
+	color:#0066FF;
+}
+.context {
+	height:900px;
+	width:580px;
+	text-align:center;
+	margin:0 auto;
+}
+.caculator {
+	height:300px;
+	width:500px;
+	margin:0 auto;
+}
+.screen {
+	background-color:#FFF;
+	color:#000;
+	text-align:right;
+}
+.button{
+	height:30px;
+	width:35px;
+	color:0033FF;
+}
+-->
+</style>
+<script language="javascript" type="text/javascript">
+<!--
+	//function C 
+	// Compute factorial of x 
+	function factorial(x){
+		var i= 1, result= 1;
+		for (i= 1; i<= x; i++){
+			result = result* i;
+		}
+		return result;
+	}
+
+	// Base converter
+	function baseConvert(x, base){
+		// delete later
+		if (x.length != 0){
+		x= parseInt(x);
+		var result= new Array();
+		var r = 0;
+		while (x != 0){
+			r= x%base;
+			x= parseInt(x/base);
+			result.push(r);
+		}
+		// Creating final result
+		result.reverse();
+		var fResult= new Array();
+		var i=0;
+		for (i= 0; i< result.length; i++){
+			fResult += result[i];
+		}
+		
+		return fResult.toString();
+		}
+		else alert ("Nothing to convert!");
+	}
+
+
+	// Postfix Constructor
+	function InPostConverter (x){
+		var splitArr= x.split(" ");
+		var i= 0;
+		var stack= new Array();
+		//var postfix = "";
+		var postfix = new Array;
+		for (i= 0; i< splitArr.length; i++){
+
+			// check if split[i] is numeric --> add to postfix
+			if (!isNaN(splitArr[i])){
+				//if (i != 0) {postfix += " ";}
+				//postfix += splitArr[i];
+				postfix.push(splitArr[i]);
+			}
+			
+			// check if split[i] == ")" --> pop until "(" reached
+			else {
+				if (splitArr[i] == ")"){
+					var temp = stack.pop();
+					while (temp != "("){
+						//postfix += " " + temp;
+						postfix.push(temp);
+						temp= stack.pop();
+					}	
+				}
+				else {
+					stack.push(splitArr[i]);
+				}
+			}
+		}
+
+		// finalize postfix
+		while (stack.length != 0){
+			//postfix += " " + stack.pop();
+			postfix.push(stack.pop());
+		}
+
+		return postfix;
+	}	
+
+	// Postfix calculator
+	function postfixCalculator (postfix){
+		var splitArr = postfix;//.split(" ");
+		var stack = new Array();
+		var i= 0;
+		for (i = 0; i< splitArr.length; i++){
+			
+			// check if splitArr[i] is numeric --> push in stack
+			if (!isNaN(splitArr[i])){
+				stack.push(splitArr[i]);
+			}
+			// push the result of required operations
+			else {
+				var a = stack.pop();
+				//var b = stack.pop(); 
+				switch (splitArr[i]){
+					
+					// Basic operators
+					case "+": stack.push(parseInt(a)+parseInt(stack.pop())); break;
+					case "*": stack.push(a*stack.pop()); break;
+					case "-": stack.push(stack.pop()-a); break;
+					case "/": stack.push(stack.pop()/a); break;
+					
+					// Sin cos tan
+					case "sin": stack.push(Math.sin(a));break;
+					case "cos": stack.push(Math.cos(a));break;
+					case "tan": stack.push(Math.tan(a));break;
+					
+					// Power
+					//case "^2": stack.push(Math.pow(a, 2));break;
+					//case "^3": stack.push(Math.pow(a, 3));break;
+					case "^": stack.push(Math.pow(stack.pop(), a));break;
+					
+					// other
+					case "sqrt": stack.push(Math.sqrt(a));break;
+					case "!": stack.push(factorial(a));break;
+					case "ln": stack.push(Math.log(a)/Math.log(Math.E));break;
+					//default: alert("Syntax error!");
+				}
+			}
+		}
+		return stack.pop();
+	}	
+	
+	// Compute the displayed result
+	function computeResult(x){
+		postfix =  new String();
+		postfix = InPostConverter(x);
+		return postfixCalculator(postfix);
+	}
+-->
+</script>
+</head>
+
+<body>
+<div class="context">
+
+<div class="caculator">
+	<fieldset>
+	<legend>Caculator</legend>
+    <form id="form" name="form" action="" method="post">
+    <table>
+  <tr>
+    <td colspan="5"><input name="txt" type="text" value="0" readonly class="screen"size="25" onMouseDown="alert('Chương trình không cho phép can thiêp vào màn hình !')"></td>
+  </tr>
+  <tr>
+    <td colspan="5"><input name="hed" type="radio"onClick="to_bin(),hedem='2',disabled_botton()">
+      <span class="style2">Bin</span>
+      <input name="hed" type="radio"onClick="to_hex(),hedem='16',disabled_botton()">
+      <span class="style2">Hex</span>      
+      <input name="hed" type="radio"onClick="to_oct(),hedem='8',disabled_botton()">
+      <span class="style2">Oct</span>      
+      <input name="hed" type="radio"checked="checked" onClick="to_dec(),hedem='10',disabled_botton()">
+      <span class="style2">Dec</span></td>
+    </tr>
+  <tr>
+    <td colspan="5">&nbsp;</td>
+  </tr>
+  <tr>
+  	<td><input id="-l" type="button" class="button" value="-l" onClick="form.txt.value+= '^ -1'"></td>
+    <td><input id="^2" type="button" class="button" value="^2" onClick="form.txt.value+= ' ^ 2'"></td>
+    <td><input id="^3" type="button" class="button" value="^3" onClick="form.txt.value+= ' ^ 3'"></td>  
+    <td><input id="AC" type="button" class="button" value="AC" onClick="formReset()"></td>
+    <td><input id="sqrt" type="button" class="button" value="sqrt" onClick="toantu=this.value,gan()"></td>
+    <td><input id="^" type="button" class="button" value="^" onClick="toantu=this.value,gan()"></td>
+    <td><input id="/" type="button" class="button" onClick="toantu=this.value,gan()" value="/"></td>
+    <td><input id="a" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="A"></td>
+  </tr>
+  <tr>
+  	<td><input id="sqrt" type="button" class="button" value="sqrt" onClick="form.txt.value+= 'sqrt '"></td>
+  	<td><input id="!" type="button" class="button" value="!" onClick="form.txt.value+= ' !'"></td>
+ 	<td><input id="^" type="button" class="button" value="^" onClick="form.txt.value+= ' ^ '"></td>
+    <td><input id="7" type="button" class="button" value="7" onClick="form.txt.value+='7'"></td>
+    <td><input id="8" type="button" class="button" value="8" onClick="form.txt.value+='8'"></td>
+    <td><input id="9" type="button" class="button" value="9" onClick="form.txt.value+='9'"></td>
+    <td><input id="*" type="button" class="button" value="*" onClick="form.txt.value+=' * '"></td>
+    <td><input id="b" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="B"></td>
+  </tr>
+  <tr>
+  	<td><input id="sin" type="button" class="button" value="sin" onClick="form.txt.value+= 'sin '"></td>
+    <td><input id="cos" type="button" class="button" value="cos" onClick="form.txt.value+= 'cos '"></td>
+    <td><input id="tan" type="button" class="button" value="tan" onClick="form.txt.value+= 'tan '"></td>
+    <td><input id="4" type="button" class="button" value="4" onClick="form.txt.value+='4'"></td>
+    <td><input id="5" type="button" class="button" value="5" onClick="form.txt.value+='5'"></td>
+    <td><input id="6" type="button" class="button" value="6" onClick="form.txt.value+='6'"></td>
+    <td><input id="-" type="button" class="button" onClick="toantu=this.value,gan()" value="-"></td>
+    <td><input id="c" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="C"></td>
+  </tr>
+  <tr>
+  	<td><input id="ln" type="button" class="button" value="ln" onClick="form.txt.value+= 'ln '"></td>
+	<td><input id="(" type="button" class="button" value="(" onClick="form.txt.value+= '( '"></td>
+	<td><input id=")" type="button" class="button" value=")" onClick="form.txt.value+= ' )'"></td>
+    <td><input id="1" type="button" class="button" onClick="form.txt.value+='1'" value="1"></td>
+   	<td><input id="2" type="button" class="button" onClick="form.txt.value+='2'" value="2"></td>
+    <td><input id="3" type="button" class="button" onClick="form.txt.value+='3'" value="3"></td>
+    <td><input id="+" type="button" class="button" onClick="toantu=this.value,gan()" value="+"></td>
+    <td><input id="d" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="D"></td>
+  </tr>
+  <tr>
+  	<td><input id="Rand" type="button" class="button" value="Rand" onClick="form.txt.value+= ' Rand'"></td>
+    <td><input id="C" type="button" class="button" value="C" onClick="form.txt.value+= ' C '"></td>
+    <td><input id="P" type="button" class="button" value="P" onClick="form.txt.value+= ' P '"></td>
+    <td><input id="0" type="button" class="button" onClick="form.txt.value+='0'" value="0"></td>
+    <td><input id="." type="button" class="button" onClick="form.txt.value+=this.value" value="."></td>
+    <td><input id="=" type="button" class="button" onClick="thuchienpheptinh(),gan()" value="="></td>
+ 	<td><input id="f" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="F"></td>
+	<td><input id="e" type="button" class="button" onClick="form.txt.value+=this.value" disabled="" value="E"></td>
+  </tr>
+</table> 
+</form>
+	</fieldset>
+</div>
+</body>
+</html>

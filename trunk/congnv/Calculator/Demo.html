@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Demo</title>
+<script language="javascript" type="text/javascript">
+	//function C 
+	// Compute factorial of x 
+	function factorial(x){
+		var i= 1, result= 1;
+		for (i= 1; i<= x; i++){
+			result = result* i;
+		}
+		return result;
+	}
+
+	// Base converter
+	function fromDec(x, base){
+		
+		x= parseInt(x);
+		var result= new Array();
+		var r = 0;
+		while (x != 0){
+			r= x%base;
+			if (r > 9) {
+				switch (r) {
+					case 10: r= 'A'; break;
+					case 11: r= 'B'; break;
+					case 12: r= 'C'; break;
+					case 13: r= 'D'; break;
+					case 14: r= 'E'; break;
+					case 15: r= 'F'; break;
+				}
+			}
+			x= parseInt(x/base);
+			result.push(r);
+		}
+		
+		// Creating final result
+		result.reverse();
+		var fResult= new Array();
+		var i=0;
+		for (i= 0; i< result.length; i++){
+			fResult += result[i];
+		}
+		
+		return fResult;
+	}
+	
+	// base builder
+	function toDec(x, base){
+		var i= 0;
+		var result= 0;
+		var n= x.length;
+		var temp = "";
+		
+		for (i= 0; i< n; i++){
+			temp = x.charAt(i);
+			if (isNaN(temp)){
+				switch (temp){
+					case 'A': temp = '10'; break;
+					case 'B': temp = '11'; break;
+					case 'C': temp = '12'; break;
+					case 'D': temp = '13'; break;
+					case 'E': temp = '14'; break;
+					case 'F': temp = '15'; break;
+				}
+			}
+			result+= temp*Math.pow(base, n-1-i);
+		}
+		return result;
+	}
+	
+	function baseConverter(x, base, toBase){
+		var result= "";
+		var temp= "";
+		
+		temp = toDec(x, base);
+		result = fromDec(temp, toBase);
+		
+		return result;
+	}
+
+	// Postfix Constructor
+	
+	function InPostConverter (x){
+		var splitArr= x.split(" ");
+		var i= 0;
+		var stack= new Array();
+		//var postfix = "";
+		var postfix = new Array;
+		for (i= 0; i< splitArr.length; i++){
+
+			// check if split[i] is numeric --> add to postfix
+			if (!isNaN(splitArr[i])){
+				//if (i != 0) {postfix += " ";}
+				//postfix += splitArr[i];
+				postfix.push(splitArr[i]);
+			}
+			
+			// check if split[i] == ")" --> pop until "(" reached
+			else {
+				if (splitArr[i] == ")"){
+					var temp = stack.pop();
+					while (temp != "("){
+						//postfix += " " + temp;
+						postfix.push(temp);
+						temp= stack.pop();
+					}	
+				}
+				else {
+					stack.push(splitArr[i]);
+				}
+			}
+		}
+
+		// finalize postfix
+		while (stack.length != 0){
+			//postfix += " " + stack.pop();
+			postfix.push(stack.pop());
+		}
+
+		return postfix;
+	}	
+
+	// Postfix calculator
+	function postfixCalculator (postfix){
+		var splitArr = postfix;//.split(" ");
+		var stack = new Array();
+		var i= 0;
+		for (i = 0; i< splitArr.length; i++){
+			
+			// check if splitArr[i] is numeric --> push in stack
+			if (!isNaN(splitArr[i])){
+				stack.push(splitArr[i]);
+			}
+			// push the result of required operations
+			else {
+				var a = stack.pop();
+				//var b = stack.pop(); 
+				switch (splitArr[i]){
+					
+					// Basic operators
+					case "+": stack.push(parseInt(a)+parseInt(stack.pop())); break;
+					case "*": stack.push(a*stack.pop()); break;
+					case "-": stack.push(stack.pop()-a); break;
+					case "/": stack.push(stack.pop()/a); break;
+					
+					// Sin cos tan
+					case "sin": stack.push(Math.sin(a));break;
+					case "cos": stack.push(Math.cos(a));break;
+					case "tan": stack.push(Math.tan(a));break;
+					
+					// Power
+					//case "^2": stack.push(Math.pow(a, 2));break;
+					//case "^3": stack.push(Math.pow(a, 3));break;
+					case "^": stack.push(Math.pow(stack.pop(), a));break;
+					
+					// other
+					case "sqrt": stack.push(Math.sqrt(a));break;
+					case "!": stack.push(factorial(a));break;
+					case "ln": stack.push(Math.log(a)/Math.log(Math.E));break;
+					//default: alert("Syntax error!");
+				}
+			}
+		}
+		return stack.pop();
+	}	
+	
+	// Compute the displayed result
+	function computeResult(x){
+		postfix =  new String();
+		postfix = InPostConverter(x);
+		return postfixCalculator(postfix);
+	}
+	
+</script>
+</head>
+
+<body>
+<form id="form" name="form" action="" method="post">
+<input type="text" name="txt" value="0"/>
+<input type="button" name="1" value="1" onclick="form.txt.value+= '1'"  />
+<input type="button" name="x^2" value="x^2" onclick="form.txt.value += ' ^ 2'" />
+<input type="button" name="x^3" value="x^3" onclick="form.txt.value += ' ^ 3'" />
+<input type="button" name="x^y" value="x^y" onclick="form.txt.value += ' ^ '" />
+<input type="button" name="=" value="=" onclick="form.txt.value = computeResult(form.txt.value)" />
+<input type="button" name="bin" value="bin" onclick="form.txt.value = fromDec(form.txt.value, 2)" />
+<input type="button" name="to_Dec" value="to_Dec" onclick="form.txt.value = toDec(form.txt.value, 2)" />
+<input type="button" name="to_Oct" value="to_Oct" onclick="form.txt.value = baseConverter(form.txt.value, 2, 8)" />
+<input type="button" name="to_Hex" value="to_Hex" onclick="form.txt.value = baseConverter(form.txt.value, 2, 16)" />
+<input type="button" name="Del" value="Del" onclick="form.txt.value = form.txt.value.blink()"  />
+
+</form>
+</body>
+</html>
