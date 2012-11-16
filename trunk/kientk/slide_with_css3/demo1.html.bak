@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta charset="utf-8">
+		<style type="text/css">
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, a, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, input, textarea, button, table, caption, tbody, tfoot, thead, tr, th, td {
+     background: none repeat scroll 0% 0% transparent;
+     border: 0pt none;
+     font-size: 100%;
+     list-style: none outside none;
+     margin: 0pt;
+     outline: 0pt none;
+     padding: 0pt;
+     vertical-align: baseline;
+}
+
+body {
+     background: url(bg.jpg) fixed;
+     background-size:100%;
+     font-size: 12px;
+     margin: 0pt;
+    padding:0;
+}
+
+.clear{
+	width:100%;
+	height:1px;
+	float:none;
+	clear:both;
+}
+
+#main {
+     margin: 100px auto auto;
+     width: 940px;
+}
+
+#demo{
+    position:fixed;
+	right:20px;
+	top:100px;
+}
+
+
+#demo a{
+	display:block;
+    font-style:italic;
+    text-decoration:none;
+    color:white;
+    background-color:#656565;
+    font-size:16px;
+    padding:4px 15px;
+    margin-right:20px;
+	margin-bottom:10px;
+}
+
+#demo a.on{
+	background-color:#232323;
+}
+.input {
+     display: none;
+}
+
+form {
+     position: relative;
+	 background-color:#d5d6d8;
+}
+
+/*---tạo bóng---*/
+form:before,form:after {   
+     bottom: 5px;
+     box-shadow: 0pt 6px 12px rgba(0, 0, 0, 1);
+     content: "";
+     height: 10px;    
+     position: absolute;
+     width:49%;
+     z-index: -1;
+}
+
+form:before{
+	left: 6px;
+	-moz-transform: rotate(-1deg);
+	-o-transform: rotate(-1deg);
+	-webkit-transform: rotate(-1deg);
+	-ms-transform: rotate(-1deg);
+	transform: rotate(-1deg);
+}
+
+form:after{
+	right: 6px;
+	-moz-transform: rotate(1deg);
+	-o-transform: rotate(1deg);
+	-webkit-transform: rotate(1deg);
+	-ms-transform: rotate(1deg);
+	transform: rotate(1deg);
+}
+
+#slide {
+     height: 400px;
+     overflow: hidden;
+     position: relative;
+     width: 940px;
+}
+
+#slide_wrap {
+     height:400px;
+     left: 0pt;
+     position: absolute;
+     top: 0pt;
+     width: 3760px;
+	 -moz-transition:left 0.6s ease-in-out;
+	 transition:left 0.6s ease-in-out;
+	 -webkit-transition:left 0.6s ease-in-out;
+	 -o-transition:left 0.6s ease-in-out;
+}
+
+#slide_wrap img {
+     float: left;
+}
+
+.label {
+     background-color: white;
+     border-radius: 20px 20px 20px 20px;
+     bottom: 10px;
+     box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.4);
+     cursor: pointer;
+     display: block;
+     height: 12px;
+     position: absolute;
+     width: 12px;
+     z-index:2;
+    -moz-transition:width 0.4s,height 0.4s ease;
+	-webkit-transition:width 0.4s,height 0.4s ease;
+	-o-transition:width 0.4s,height 0.4s ease;
+	transition:width 0.4s,height 0.4s ease;
+}
+
+h1{
+	width:940px;
+    z-index:1;
+    height:50px;
+	position:absolute;
+	bottom:0;
+    left:-940px;
+	background-color:rgba(0,0,0,0.8);
+    font-family:calibri;
+	text-transform:uppercase;
+    font-weight:600;
+    color:white;
+	letter-spacing:1px;
+    font-size:18px;
+    text-shadow:0 1px 0 rgba(0,0,0,0.5);
+    line-height:50px;
+    text-indent:15px;
+	opacity:0;
+	-moz-transition:opacity 1s,left 1s ease;
+    -webkit-transition:opacity 1s,left 1s  ease;
+    -o-transition:opacity 1s,left 1s  ease;
+    transition:opacity 1s,left 1s  ease;
+    
+}
+
+/* vị trí của các nút */
+#button4 {
+     right: 15px;
+}
+
+#button3 {
+     right: 35px;
+}
+
+#button2 {
+     right: 55px;
+}
+
+#button1 {
+     right: 75px;
+}
+
+/* nút khi input được check */
+#image1:checked ~ #button1,
+#image2:checked ~ #button2,
+#image3:checked ~ #button3,
+#image4:checked ~ #button4{
+    width:7px;
+    height:7px;
+    margin-bottom:1px;
+    margin-right:2px;
+}
+
+/* di chuyển slide khi input được check */
+#image1:checked ~ #slide_wrap {
+     left: 0pt;
+}
+
+#image2:checked ~ #slide_wrap {
+     left: -940px;
+}
+
+#image3:checked ~ #slide_wrap {
+     left: -1880px;
+}
+
+#image4:checked ~ #slide_wrap {
+     left: -2820px;
+}
+
+/* hiệu ứng fade */
+#image1:checked ~ #slide_wrap img:nth-child(1),
+#image2:checked ~ #slide_wrap img:nth-child(2),
+#image3:checked ~ #slide_wrap img:nth-child(3),
+#image4:checked ~ #slide_wrap img:nth-child(4){
+     opacity:1;
+}
+
+/* text khi input được check*/
+#image1:checked ~ #text1,
+#image2:checked ~ #text2,
+#image3:checked ~ #text3,
+#image4:checked ~ #text4{
+    opacity:1;
+    left:0;
+}
+
+
+
+</style>
+	</head>
+		
+	<body>
+		<div id="main">
+			<ul id="demo">
+				<li><a href="demo1.html" class="on">Demo 1</a></li>
+				<li><a href="demo2.html">Demo 2</a></li>
+				<li><a href="demo3.html">Demo 3</a></li>
+			</ul>
+
+			<div class="clear"></div>
+
+<form>
+	<div id="slide">					
+		<input type="radio" id="image1" name="slide" class="input" checked/>
+		<label for="image1" class="label" id="button1"></label><!--button 1-->
+
+		
+		<input type="radio" id="image2" name="slide" class="input"/>
+		<label for="image2" class="label" id="button2"></label><!--button 2-->
+
+		
+		<input type="radio" id="image3" name="slide" class="input"/>
+		<label for="image3" class="label" id="button3"></label><!--button 3-->
+
+		
+		<input type="radio" id="image4" name="slide" class="input"/>
+		<label for="image4" class="label" id="button4"></label><!--button 4-->
+
+		
+		<div id="slide_wrap">
+			<img src="1.jpg" width="940" height="400" />
+			<img src="2.jpg" width="940" height="400" />
+			<img src="3.jpg" width="940" height="400" />
+			<img src="4.jpg" width="940" height="400" />
+		</div><!--slide--->
+		
+		<h1 id="text1">Black-red model living room</h1><!--text cho ảnh 1-->
+
+		<h1 id="text2">Amsterdam Apartment dining space interior design</h1><!--text cho ảnh 2-->
+
+		<h1 id="text3">Green room interior wide</h1><!--text cho ảnh 3-->
+
+		<h1 id="text4">Wide open tv room design</h1><!--text cho ảnh 4-->
+	</div>
+</form>		
+		</div><!--main-->
+	</body>
+</html>
