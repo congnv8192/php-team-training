@@ -1,0 +1,33 @@
+# Insert fit_category(r)
+
+
+INSERT INTO `fit_category(r)`(`category_alias`, `book_id`) 
+SELECT `category`.`category_alias`, `book`.`id` FROM category, book
+WHERE 
+category.category_name = "Novel" AND book.title = "Harry Potter and the Half-blood Prince"
+;
+
+# Create bookshelf(r)
+
+INSERT INTO `bookshelf(r)`(`user_id`, `book_id`) 
+SELECT `user`.`user_id`, `book`.`id` FROM user, book
+WHERE 
+user.account = "Test1" AND book.title = "Harry Potter and the Half-blood Prince"
+;
+
+#search - basic:
+
+SELECT book.id, title, category_name, category.category_alias FROM `book`,`fit_category(r)`,`category`
+WHERE book.title LIKE '%Harry%' 
+
+#search - advanced:
+
+SELECT title,category_name FROM `book`,`fit_category(r)`,category
+WHERE book.title LIKE '%Harry%'
+AND book.id=`fit_category(r)`.`book_id`
+AND category.category_alias=`fit_category(r)`.`category_alias`;
+#Group by title
+
+# Get publisher name
+
+SELECT publisher.alias,name FROM publisher,book WHERE publisher.alias=book.published_by AND publisher.name like '%Kim Dong%'
